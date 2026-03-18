@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 groq_api_key = os.getenv("GROQ_KEY")
+print(groq_api_key)
 
 CHROMA_PATH = "chroma"
 DATA_PATH = "./data/"
