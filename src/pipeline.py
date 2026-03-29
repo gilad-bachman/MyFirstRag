@@ -1,4 +1,4 @@
-from langchain_community.document_loaders import PyPDFDirectoryLoader
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -7,11 +7,17 @@ from langchain_chroma import Chroma
 CHROMA_PATH = "chroma"
 DATA_PATH = "./data/"
 
-# Load documents from the specified directory
+# Load documents from the data directory
 def load_documents():
-    print("Loading documents...")
-    document_loader = PyPDFDirectoryLoader(DATA_PATH)
-    return document_loader.load()
+    print("Loading text documents...")
+    # Use TextLoader for .txt files
+    loader = DirectoryLoader(
+        DATA_PATH, 
+        glob="**/*.txt", 
+        loader_cls=TextLoader,
+        loader_kwargs={'encoding': 'utf-8'}
+    )
+    return loader.load()
 
 # Split the loaded documents into smaller chunks for processing
 def split_documents(documents: list[Document]):

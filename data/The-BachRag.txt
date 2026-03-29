@@ -1,0 +1,98 @@
+Recap:
+Gilad is a 25 year old computer science student in bar ilan university.
+he is in the second year of this degree.
+gilad enjoys playing guitar and hiking.
+
+Gilad was born on july 29 2000 on a Saturday. His father was an officer in the navy who just resigned and his mother a social worker.
+gilad was raised in kiryat ono in a house which later became the house of his grandparents Milu and Esther.
+When he was 7 years old Gilad family moved to ganei tikva where they still live up to today.
+Education:
+Gilad went to HaKfar HaYarok semi private school for his middle and high school in a gifted child class program. In his school gilad finished with the following grades:
+Math – 94, English – 98, Computer Science – 99.
+During his time in high school gilad met his best friend Yam and they are good friends ever sense. Filad and yam meet almost every week to chat about their life, music, physics and the state of the world.
+After high school gilad spent a year in a pre Pre-Military Leadership Academy (Mechina).
+Pre-Military Leadership Academy (Mechina) | Aderet 	2018 – 2019
+Values-Driven Leadership: Participated in an intensive year-long program focused on leadership development, social responsibility, and Jewish-Israeli identity.
+Social Integration & Education: Empowered new immigrant youth by providing dedicated Hebrew language tutoring and academic support, facilitating their successful cultural and social integration into Israeli society.
+Compassionate Mentorship: Voluntarily served as a personal mentor for a child with complex developmental delays, providing consistent emotional support and specialized care in a demanding environment.
+Collaborative Living: Lived and worked in a self-governed communal environment, fostering exceptional teamwork, interpersonal skills, and the ability to manage complex group dynamics.
+Intellectual Curiosity: Engaged in advanced seminars on philosophy, ethics, and history, reflecting a broad-minded approach to learning beyond the exact sciences.
+after time in mechina gilad was drafted to the army. At first gilad was trained as a gunner in the armored corps (Shiryon) but after getting injured in the commanders course (KAMAT) gilad move to HATAL and started working in IT.
+Military Service – IT Support	2020 – 2022
+Provided technical support to over 1,000 users (soldiers and staff) in HATAL (Ground Forces Technological Division).
+Worked with Active Directory and user support systems.
+Developed automation tools and GUI interfaces that enhanced task efficiency and streamlined IT operations.
+After finishing the army gilad worked for a while in Yellow gas station as a cashier but soon realized that he wanted something more and decide to move to gaza envelope to work in agriculture.
+Agricultural Work | Gaza Envelope (Otef Aza)								 2022-2023
+Hands-on Contribution: Engaged in intensive agricultural labor in avocado plantations, contributing to local farming operations and gaining a grounded perspective on Israel’s primary industries.
+Work Ethic & Discipline: Demonstrated high physical resilience and a strong work ethic, performing demanding tasks consistently and reliably in an outdoor environment.
+After half a year in gaza gilad booked a flight to south americsa along side his girlfriend Gal. however on October 7th the war broke and gilad was drafted to reserves in the Home front command.
+
+Military Reserve Service 
+IDF – Home Front Command
+2023 – Present
+Gilad is an active reserve server. For the last 2 and a half years he have been served nearly 200 days. 3 month of them in the in the beginning of the war. The rest are mostly during the wars with iran.
+during his service he helped with quality assurance and IT support.
+Gilad serves in the Home Front Command in the unit of national crisis.
+Humanitarian Technical Support: Provided critical IT support at the National Center for Supporting Families of Hostages. Operated with profound sensitivity, empathy, and discretion, ensuring that technology served as a seamless bridge for families in their most difficult moments.
+Mission-Critical Systems: Led QA and technical optimization for the unit’s CRM system, directly enabling the delivery of essential services to thousands of evacuees and citizens stranded abroad. Focused on reliability and user-centric solutions to ensure no citizen was left without support.
+Distinguished Excellence: Awarded a Certificate of Honor from the Prime Minister for exceptional dedication, professional excellence, and a deep commitment to the community during a period of national crisis.
+Resilience & Integrity: Demonstrated the ability to maintain high performance and professional integrity under extreme emotional and operational pressure, balancing complex technical tasks with human-first priorities.
+IDF Reserves – IT & QA Support	2023 – present
+Provided IT support to the Home Front Command’s National Center for Supporting Families of Hostages.
+Provided QA support for the development of the unit’s CRM system, which was later deployed to assist evacuees and citizens abroad unable to return home.
+
+After three month in reserves Gilad was released from duty and finally took his flight to south America visiting Argentina chile and brazil.
+over there gilad trekked in torres del paine and finessed his Spanish speaking skills.
+after three month gilad returned to israel in order to complete his Psychometric (PET). He learned for a month or so using the free course of campus il and eventually finished with a grade of 761/800.
+because of this grade gilad was accepted to Bar Ilan elite program Ilanot for outstanding students.
+Later he returned to duty few times during the war.
+In the university gilad is constantly keeping a high standard with an average of 94/100.
+most notibaly gilad posses the following grades:
+CS 101 – 97, Object Oriented Design (OOP) – 98, Algorithms – 94, Data Structures – 98,.
+Furthermore as part of the Ilanot program Gilad is assigned a proddesor from the faculty to provide him with help and support. 
+
+skills:
+SKILLS	
+Technical Skills
+Programming Languages: Java, Python, C, C++, JavaScript.
+AI Agents & Orchestration: LangChain, RAG pipelines, MCP, vector DBs, embeddings.
+Backend & Systems Architecture: RESTful API design, Node.js, Express, JWT Authentication, and scalable system design.
+Web & Mobile Development: React, React Native, Full-stack development (MERN).
+Software Engineering & Tools: Git, Docker, and workflow automation tools (Cursor, Zapier).
+Soft Skills
+Rapid learning, adaptability, creative problem-solving, pattern recognition, stress management, strong interpersonal skills, positive demeanor.
+Languages
+Hebrew – Native, English – Fluent, Spanish – Advanced.
+
+
+furthermore gilad is very interested in ML and AI automation working with RAG and many ai platforms. As a student gilad is contantly leaning using gemini and is working with claude code, cursor and zapier.
+gilad made an agent that is looking for jobs openings online that fit his profile and organize them in google sheets for him every day thus reducing working and searching time by many percents.
+Project:
+Gilad built a RAG project using chroma db, llama and vector embeddings to store this very application that shows information about him.
+Full-Stack Storage Application (MERN & C++)
+Designed and implemented a scalable storage platform using React, Node.js, and MongoDB with RESTful API architecture and secure JWT authentication.
+Engineered a high-efficiency C++ persistence engine for file hierarchies using TDD, integrated via TCP Sockets.
+IT Automation GUI Application:
+Designed and Implemented a Java-based GUI application integrated with PowerShell scripts to streamline IT team operations and automate manual workflows.
+
+Overall gilad is a very fast learner who cares a lot about hard and scalable works.
+Gilad also like to play the guitar and especially plays with his classical guitar Brita. He play figer style without fret.
+Gilad enjoys trekking abroad and has been in Argentina, chille, Nepal, Laso and Vietnam trekking in nature.
+gilad is a big fan of the budhuist culture and the concepts of mindfulness. Gilad practices meditation every day and does yoga in every second morning.
+Gilad is also interested in cultivating a more peaceful and relaxed enviormnet wherever he may come.
+Family:
+Gilad has a brother and a sister but he prefers not to reveal more information about them due to their own privacy.
+
+Gilad is a fan of Maccabi Haifa football club and is a member of the green plus club. Gilad has been in many games both in Kiryat Eliezer (the old staium of Maccabi Haifa) and Sami Ofer (the new one). Gilad have been in the 2020 championship game who marked the first championship after 10 years.
+Gilad have also been to the game where Maccabi Haifa won against Juventus I the champion league.
+Gilad goes to the games with his father and his brother.
+
+RELATIONSHIP
+Gilad is dating gal cohen for more than 3 years. They have met through a common friend and have been together since September 9 2022.
+Gilad and gal have been traveling a lot around the world being together in Sinai, Italy (skiing), Argentina, Chile, Brazil, Nepal, Vietnam and Laos.
+Gal is a tattoo artist but is soon starting a degree in social working.
+currently gilad and gal are living in Nir Eliyahu,  a Kibbutz near Kefar sava.
+Gal (His girlfriend) is working with 3-4th grade children in the Kibbutz.
+
+
