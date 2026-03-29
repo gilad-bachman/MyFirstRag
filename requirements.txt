@@ -4,7 +4,10 @@ langchain-chroma
 langchain-community
 python-dotenv
 chromadb
-langchain_huggingface
-langchain_text_splitters
-langchain_core
+langchain-huggingface
+langchain-text-splitters
+langchain-core
 sentence-transformers
+langchain
+langchain-classic
+flashrank
