@@ -1,5 +1,31 @@
+from openai import OpenAI
+from src.pipeline import create_bachrag_retriever
 import streamlit as st
 from src.query import query_rag
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# --- CACHING THE ENGINE ---
+@st.cache_resource
+def initialize_bachrag():
+    """
+    The 'Heart' of the app. Loads everything into RAM once.
+    """
+    # 1. Initialize the Hybrid Retriever (from pipeline)
+    retriever = create_bachrag_retriever()
+    
+    # 2. Initialize the Groq/OpenAI Client
+    client = OpenAI(
+        base_url="https://api.groq.com/openai/v1",
+        api_key=os.getenv("GROQ_KEY") 
+    )
+    
+    return retriever, client
+
+# Load the heavy machinery
+retriever_engine, ai_client = initialize_bachrag()
 
 # --- UI CONFIGURATION ---
 st.set_page_config(
@@ -54,8 +80,8 @@ if prompt:
     
     with st.spinner("Accessing ChromaDB..."):
         try:
-            # Query the RAG system
-            response = query_rag(prompt)
+            # Query the RAG system (sending retriever and client for multi-query expansion and retrieval)
+            response = query_rag(prompt, retriever_engine, ai_client)
             
             # Display the result in a professional "Result Card" rather than a chat bubble
             st.markdown(f"""

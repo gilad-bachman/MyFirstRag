@@ -3,14 +3,8 @@ from src.pipeline import get_embedding_function
 from openai import OpenAI
 from langchain_classic.retrievers.contextual_compression import ContextualCompressionRetriever
 from langchain_classic.retrievers.document_compressors import FlashrankRerank
+from langchain_classic.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_chroma import Chroma
-import os
-from dotenv import load_dotenv
-
-
-load_dotenv()
-
-groq_api_key = os.getenv("GROQ_KEY")
 
 CHROMA_PATH = "chroma"
 DATA_PATH = "./data/"
@@ -50,65 +44,34 @@ Provide exactly 3 queries, one per line. Do not include numbers or bullet points
 """
 
 
-def get_reranked_retriever():
-    # 1. Standard Vector Store Setup
-    db = Chroma(
-        persist_directory=CHROMA_PATH, 
-        embedding_function=get_embedding_function()
-    )
 
-    # 2. Base Retriever: Fetch MORE candidates than you actually need (e.g., 20)
-    base_retriever = db.as_retriever(search_kwargs={"k": 20})
-
-    # 3. Setup the Reranker (Judge)
-    compressor = FlashrankRerank()
-
-    # 4. Create the Compression Retriever
-    compression_retriever = ContextualCompressionRetriever(
-        base_compressor=compressor, 
-        base_retriever=base_retriever
-    )
-    
-    return compression_retriever
-
-client = OpenAI(
-    base_url="https://api.groq.com/openai/v1",
-    api_key=groq_api_key 
-)
-
-def query_rag(query_text: str):
+def query_rag(query_text: str, retriever, client):
     # --- STEP 1: Multi-Query Expansion ---
     rewrite_prompt = REWRITE_PROMPT_TEMPLATE.format(original_query=query_text)
     rewrite_response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
         messages=[{"role": "user", "content": rewrite_prompt}]
     )
-    # Split the response into a list of 3 queries
+    
     queries = [q.strip() for q in rewrite_response.choices[0].message.content.split('\n') if q.strip()]
-    # Add the original query to the list too, just in case!
     queries.append(query_text)
     
-    print(f"Expanding research into: {queries}")
+    print(f"🔍 Expanding research into {len(queries)} variations...")
 
-    # --- STEP 2: Multi-Retrieval & Deduplication ---
-    retriever = get_reranked_retriever()
+    # --- STEP 2: Hybrid Retrieval & Deduplication ---
     all_docs = []
     seen_content = set()
 
     for q in queries:
-        # Retrieve docs for each variation
+        # This now triggers: (BM25 + Vector) -> FlashRank for EVERY variation
         docs = retriever.invoke(q)
         for doc in docs:
-            # Simple deduplication: don't add the same text twice
             if doc.page_content not in seen_content:
                 all_docs.append(doc)
                 seen_content.add(doc.page_content)
 
-    # --- STEP 3: Context Preparation ---
-    # Now we have a rich, deduplicated list of context chunks
+    # --- STEP 3: Generation ---
     context_text = "\n\n---\n\n".join([doc.page_content for doc in all_docs])
-    
-    # --- STEP 4: Final Generation ---
     final_prompt = PROMPT_TEMPLATE.format(context=context_text, question=query_text)
 
     response = client.chat.completions.create(
@@ -118,7 +81,7 @@ def query_rag(query_text: str):
     )
     
     response_text = response.choices[0].message.content.strip()
-    sources = list(set([doc.metadata.get("id", "Unknown") for doc in all_docs]))
+    sources = sorted(list(set([str(doc.metadata.get("id", "Unknown")) for doc in all_docs])))
     
     return f"{response_text}\n\n**Sources:** {', '.join(sources)}"
         

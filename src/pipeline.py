@@ -1,3 +1,5 @@
+from langchain_classic.retrievers import BM25Retriever, ContextualCompressionRetriever, EnsembleRetriever
+from langchain_community.document_compressors import FlashrankRerank
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
@@ -87,6 +89,38 @@ def calculate_chunk_ids(chunks):
         chunk.metadata["id"] = chunk_id
 
     return chunks
+
+def create_bachrag_retriever():
+    """
+    Constructs the full retrieval stack: 
+    Vector (Chroma) + Lexical (BM25) -> Rerank (FlashRank)
+    """
+    # 1. Load data for keyword search
+    documents = load_documents()
+
+    # 2. Setup Semantic search (Chroma)
+    db = Chroma(
+        persist_directory=CHROMA_PATH, 
+        embedding_function=get_embedding_function()
+    )
+    vector_retriever = db.as_retriever(search_kwargs={"k": 15})
+
+    # 3. Setup Keyword search (BM25)
+    bm25_retriever = BM25Retriever.from_documents(documents)
+    bm25_retriever.k = 5
+
+    # 4. Hybrid Fusion (Ensemble)
+    ensemble_retriever = EnsembleRetriever(
+        retrievers=[bm25_retriever, vector_retriever],
+        weights=[0.4, 0.6] # Adjust based on preference
+    )
+
+    # 5. The Judge (FlashRank Reranker)
+    compressor = FlashrankRerank()
+    return ContextualCompressionRetriever(
+        base_compressor=compressor, 
+        base_retriever=ensemble_retriever
+    )
 
 def main():
     print("Warmin up...")
