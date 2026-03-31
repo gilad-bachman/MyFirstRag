@@ -5,6 +5,7 @@ from langchain_classic.retrievers.contextual_compression import ContextualCompre
 from langchain_classic.retrievers.document_compressors import FlashrankRerank
 from langchain_classic.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_chroma import Chroma
+from flashrank import RerankRequest
 
 CHROMA_PATH = "chroma"
 DATA_PATH = "./data/"
@@ -45,7 +46,7 @@ Provide exactly 3 queries, one per line. Do not include numbers or bullet points
 
 
 
-def query_rag(query_text: str, retriever, client):
+def query_rag(query_text: str, ensemble, client, ranker):
     # --- STEP 1: Multi-Query Expansion ---
     rewrite_prompt = REWRITE_PROMPT_TEMPLATE.format(original_query=query_text)
     rewrite_response = client.chat.completions.create(
@@ -58,20 +59,32 @@ def query_rag(query_text: str, retriever, client):
     
     print(f"🔍 Expanding research into {len(queries)} variations...")
 
-    # --- STEP 2: Hybrid Retrieval & Deduplication ---
-    all_docs = []
+    # 2. Fast Retrieval (Accumulate candidates)
+    raw_pool = []
     seen_content = set()
-
     for q in queries:
-        # This now triggers: (BM25 + Vector) -> FlashRank for EVERY variation
-        docs = retriever.invoke(q)
+        docs = ensemble.invoke(q)
         for doc in docs:
             if doc.page_content not in seen_content:
-                all_docs.append(doc)
+                raw_pool.append(doc)
                 seen_content.add(doc.page_content)
 
-    # --- STEP 3: Generation ---
-    context_text = "\n\n---\n\n".join([doc.page_content for doc in all_docs])
+    # 3. Optimized Reranking (The Judge runs ONCE)
+    pass_to_ranker = [
+        {"text": d.page_content, "meta": d.metadata} for d in raw_pool
+    ]
+    
+    # Create the request object that FlashRank expects
+    rank_request = RerankRequest(query=query_text, passages=pass_to_ranker)
+    
+    # Pass the object
+    results = ranker.rerank(rank_request)
+    
+    # Take the top 5 most relevant results
+    top_results = results[:5]
+    
+    # 4. Generate Final Response
+    context_text = "\n\n---\n\n".join([r["text"] for r in top_results])
     final_prompt = PROMPT_TEMPLATE.format(context=context_text, question=query_text)
 
     response = client.chat.completions.create(
@@ -81,7 +94,7 @@ def query_rag(query_text: str, retriever, client):
     )
     
     response_text = response.choices[0].message.content.strip()
-    sources = sorted(list(set([str(doc.metadata.get("id", "Unknown")) for doc in all_docs])))
+    sources = sorted(list(set([str(r["meta"].get("id", "Unknown")) for r in top_results])))
     
     return f"{response_text}\n\n**Sources:** {', '.join(sources)}"
         

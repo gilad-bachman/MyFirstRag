@@ -1,5 +1,5 @@
-from langchain_classic.retrievers import BM25Retriever, ContextualCompressionRetriever, EnsembleRetriever
-from langchain_community.document_compressors import FlashrankRerank
+from flashrank import Ranker
+from langchain_classic.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
@@ -90,37 +90,23 @@ def calculate_chunk_ids(chunks):
 
     return chunks
 
-def create_bachrag_retriever():
-    """
-    Constructs the full retrieval stack: 
-    Vector (Chroma) + Lexical (BM25) -> Rerank (FlashRank)
-    """
-    # 1. Load data for keyword search
-    documents = load_documents()
-
-    # 2. Setup Semantic search (Chroma)
-    db = Chroma(
-        persist_directory=CHROMA_PATH, 
-        embedding_function=get_embedding_function()
-    )
+def get_ensemble_retriever():
+    docs = load_documents()
+    # 1. Chroma (Vector Search)
+    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=get_embedding_function())
     vector_retriever = db.as_retriever(search_kwargs={"k": 15})
 
-    # 3. Setup Keyword search (BM25)
-    bm25_retriever = BM25Retriever.from_documents(documents)
+    # 2. BM25 (Keyword Search)
+    bm25_retriever = BM25Retriever.from_documents(docs)
     bm25_retriever.k = 5
 
-    # 4. Hybrid Fusion (Ensemble)
-    ensemble_retriever = EnsembleRetriever(
-        retrievers=[bm25_retriever, vector_retriever],
-        weights=[0.4, 0.6] # Adjust based on preference
-    )
+    # 3. Combine
+    return EnsembleRetriever(retrievers=[bm25_retriever, vector_retriever], weights=[0.5, 0.5])
 
-    # 5. The Judge (FlashRank Reranker)
-    compressor = FlashrankRerank()
-    return ContextualCompressionRetriever(
-        base_compressor=compressor, 
-        base_retriever=ensemble_retriever
-    )
+
+def get_reranker_model():
+    # This loads the FlashRank model into memory
+    return Ranker(model_name="ms-marco-TinyBERT-L-2-v2", cache_dir="opt/flashrank")
 
 def main():
     print("Warmin up...")
