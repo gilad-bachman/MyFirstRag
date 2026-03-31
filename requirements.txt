@@ -11,3 +11,4 @@ sentence-transformers
 langchain
 langchain-classic
 flashrank
+rank-bm25

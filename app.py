@@ -1,5 +1,26 @@
+from openai import OpenAI
+from src.pipeline import get_ensemble_retriever, get_reranker_model
 import streamlit as st
 from src.query import query_rag
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# --- CACHING THE ENGINE ---
+@st.cache_resource
+def initialize_rag_system():
+    """Builds the engine once and keeps it in RAM."""
+    retriever = get_ensemble_retriever()
+    reranker = get_reranker_model()
+    client = OpenAI(
+        base_url="https://api.groq.com/openai/v1",
+        api_key=os.getenv("GROQ_KEY")
+    )
+    return retriever, reranker, client
+
+# Load everything once
+ensemble, ranker, ai_client = initialize_rag_system()
 
 # --- UI CONFIGURATION ---
 st.set_page_config(
@@ -54,8 +75,8 @@ if prompt:
     
     with st.spinner("Accessing ChromaDB..."):
         try:
-            # Query the RAG system
-            response = query_rag(prompt)
+            # Query the RAG system (sending retriever and client for multi-query expansion and retrieval)
+            response = query_rag(prompt, ensemble, ai_client, ranker)
             
             # Display the result in a professional "Result Card" rather than a chat bubble
             st.markdown(f"""
