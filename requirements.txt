@@ -3,7 +3,7 @@ openai
 langchain-chroma
 langchain-community
 python-dotenv
-chromadb
+chromadb==1.5.5
 langchain-huggingface
 langchain-text-splitters
 langchain-core
@@ -12,3 +12,4 @@ langchain
 langchain-classic
 flashrank
 rank-bm25
+protobuf==6.33.5

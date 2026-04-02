@@ -90,14 +90,13 @@ def calculate_chunk_ids(chunks):
 
     return chunks
 
-def get_ensemble_retriever():
-    docs = load_documents()
+def get_ensemble_retriever(documents: list[Document]):
     # 1. Chroma (Vector Search)
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=get_embedding_function())
     vector_retriever = db.as_retriever(search_kwargs={"k": 15})
 
     # 2. BM25 (Keyword Search)
-    bm25_retriever = BM25Retriever.from_documents(docs)
+    bm25_retriever = BM25Retriever.from_documents(documents)
     bm25_retriever.k = 5
 
     # 3. Combine
@@ -107,6 +106,10 @@ def get_ensemble_retriever():
 def get_reranker_model():
     # This loads the FlashRank model into memory
     return Ranker(model_name="ms-marco-TinyBERT-L-2-v2", cache_dir="opt/flashrank")
+
+def ingest_data(documents: list[Document]):
+    chunks = split_documents(documents)
+    add_to_chroma(chunks)
 
 def main():
     print("Warmin up...")
