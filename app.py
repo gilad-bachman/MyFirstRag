@@ -1,5 +1,5 @@
 from openai import OpenAI
-from src.pipeline import get_ensemble_retriever, get_reranker_model
+from src.pipeline import get_ensemble_retriever, get_reranker_model, ingest_data, load_documents
 import streamlit as st
 from src.query import query_rag
 import os
@@ -11,8 +11,17 @@ load_dotenv()
 @st.cache_resource
 def initialize_rag_system():
     """Builds the engine once and keeps it in RAM."""
-    retriever = get_ensemble_retriever()
+    documents = load_documents()
+    # 1. Self-Healing: Build index if missing (for Streamlit Cloud)
+    if not os.path.exists("chroma"):
+        with st.spinner("🔧 First-time setup: Indexing biography..."):
+            ingest_data(documents)
+
+    # 2. Load the Engines
+    retriever = get_ensemble_retriever(documents)
     reranker = get_reranker_model()
+
+    # 3. Setup Client
     client = OpenAI(
         base_url="https://api.groq.com/openai/v1",
         api_key=os.getenv("GROQ_KEY")
