@@ -66,11 +66,12 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
             _initialize()
-            self._send_json(200, {"status": "ok"})
+            self._send_json(400, {"status": "ok"})
         except Exception as e:
             self._send_json(500, {"error": str(e)})
 
     def do_POST(self):
+        self._send_json(200, {"message": "POST is working"})
         length = int(self.headers.get("Content-Length", 0))
         raw = self.rfile.read(length) if length else b"{}"
         try:

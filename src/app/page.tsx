@@ -25,7 +25,7 @@ export default function Page() {
     setStatus("loading");
     setResponse(null);
     try {
-      const res = await fetch("/api/query", {
+      const res = await fetch("/api/query/", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ query: trimmed }),
