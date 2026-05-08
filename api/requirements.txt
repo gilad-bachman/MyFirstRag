@@ -1,0 +1,13 @@
+openai
+langchain-chroma
+langchain-community
+langchain-huggingface
+langchain-text-splitters
+langchain-core
+langchain
+langchain-classic
+chromadb==1.5.5
+flashrank
+rank-bm25
+protobuf==6.33.5
+python-dotenv

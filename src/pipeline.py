@@ -3,8 +3,9 @@ from langchain_classic.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_chroma import Chroma
+import os
 
 CHROMA_PATH = "chroma"
 DATA_PATH = "./data/"
@@ -34,7 +35,11 @@ def split_documents(documents: list[Document]):
 
 def get_embedding_function():
     # 'all-MiniLM-L6-v2' is the industry standard for fast, free RAG
-    return HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    return HuggingFaceEndpointEmbeddings(
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        task="feature-extraction",
+        huggingfacehub_api_token=os.getenv("HF_TOKEN"),
+    )
 
 def add_to_chroma(chunks):
     # Load the existing database

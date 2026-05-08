@@ -1,9 +1,15 @@
 venv/
 .env
+.env.local
 __pycache__/
 *.pyc
 .streamlit/
 .vscode
 .devcontainer
 opt
-chroma
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.vercel/
